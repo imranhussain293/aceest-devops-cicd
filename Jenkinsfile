@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   options {
+    skipDefaultCheckout(true)
     timestamps()
   }
 
@@ -18,7 +19,8 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        checkout scm
+        deleteDir()
+        git branch: 'main', url: 'https://github.com/imranhussain293/aceest-devops-cicd.git'
       }
     }
 
