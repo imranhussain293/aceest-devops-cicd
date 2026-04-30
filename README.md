@@ -40,6 +40,7 @@ Then open `http://localhost:8080/health`.
 ## Documentation
 - See `docs/assignment.md` for the required deliverables checklist.
 - Local Jenkins + SonarQube setup: `infra/ci/README.md`
+- Minikube deploy: `infra/k8s/minikube/README.md`
 
 ## SonarQube (local)
 
