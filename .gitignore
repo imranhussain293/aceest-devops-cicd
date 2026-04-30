@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+
+# Virtual envs
+.venv/
+venv/
+ENV/
+
+# Env / secrets
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Local tooling state
+*.log
+
+# Assignment extraction artifacts (generated)
+_assignment_docx_extracted/
+_assignment_plaintext.txt
+_assignment_paragraphs.txt
+Introduction to DevOps- CI_CD Pipeline Assignment - 2 Version 1.1 2026 batch.docx
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
