@@ -1,6 +1,7 @@
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    build:
+      context: ./jenkins
     container_name: aceest-jenkins
     ports:
       - "8081:8080"

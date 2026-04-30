@@ -40,3 +40,9 @@ Then open `http://localhost:8080/health`.
 ## Documentation
 - See `docs/assignment.md` for the required deliverables checklist.
 - Local Jenkins + SonarQube setup: `infra/ci/README.md`
+
+## SonarQube (local)
+
+When running via Docker Compose (see `infra/ci/README.md`):
+- URL: http://localhost:9000
+- Default login: `admin` / `admin` (you will be prompted to change it)
