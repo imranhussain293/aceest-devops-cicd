@@ -38,3 +38,8 @@ docker exec aceest-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ## Notes
 - SonarQube may take ~1–2 minutes to become ready on first boot.
 - Jenkins will ask for an initial admin password; retrieve it with the `docker exec` command above.
+
+## Docker builds in Jenkins
+
+The local Jenkins container is configured to build Docker images by mounting the Docker daemon socket (`/var/run/docker.sock`).
+This is convenient for local CI, but do not use this pattern for untrusted code.

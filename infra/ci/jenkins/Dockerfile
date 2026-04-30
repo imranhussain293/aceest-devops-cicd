@@ -5,6 +5,7 @@ USER root
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
+    docker.io \
     git \
     python3 \
     python3-pip \

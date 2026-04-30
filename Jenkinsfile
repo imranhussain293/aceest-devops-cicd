@@ -11,6 +11,8 @@ pipeline {
     PYTHONUNBUFFERED = '1'
 
     SONAR_HOST_URL = 'http://sonarqube:9000'
+
+    IMAGE_NAME = 'aceest-fitness'
   }
 
   stages {
@@ -35,6 +37,16 @@ pipeline {
           junit allowEmptyResults: true, testResults: 'pytest-junit.xml'
           archiveArtifacts allowEmptyArchive: true, artifacts: 'pytest-junit.xml,coverage.xml'
         }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        sh '''
+          set -eux
+          docker version
+          docker build -t ${IMAGE_NAME}:${GIT_COMMIT} .
+        '''
       }
     }
 
