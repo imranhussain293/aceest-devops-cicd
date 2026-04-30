@@ -14,11 +14,8 @@ minikube start
 # Build the app image directly into Minikube's image store
 minikube image build -t aceest-fitness:local .
 
-# Apply manifests
-kubectl apply -f infra/k8s/minikube/
-
-# Wait for rollout
-kubectl rollout status deploy/aceest-fitness
+# Apply manifests and wait for rollout
+.\scripts\k8s\deploy-minikube.ps1
 
 # Access the service
 
