@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: aceest-fitness
-          image: IMAGE_URI_PLACEHOLDER
+          image: 602751007045.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -48,3 +48,4 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+

@@ -1,0 +1,31 @@
+ACEest DevOps CI/CD Assignment Report
+
+Introduction
+
+This project is a CI/CD implementation for the ACEest Fitness & Gym application built with Flask. The application is containerized using Docker and validated through automated tests with Pytest. The delivery pipeline is implemented with Jenkins and includes static code analysis with SonarQube. The project also demonstrates application deployment in two environments: local deployment on Minikube and production-like deployment on AWS EKS. The overall goal of the assignment is to show a complete automated software delivery workflow from code changes to deployment.
+
+CI/CD Architecture
+
+The CI/CD workflow begins when code is pushed to GitHub. Jenkins checks out the repository and prepares the Python environment. The pipeline then runs linting and unit tests to verify code quality and application behavior. After the tests pass, Jenkins builds a Docker image for the application. The pipeline also runs SonarQube analysis and enforces the quality gate before allowing the build to proceed. For deployment, the application is run locally on Minikube for development validation and on AWS EKS for the cloud deployment path. Docker is used to package the application consistently, and Kubernetes is used to manage the deployments and service exposure.
+
+Implementation Details
+
+The project was implemented with an automated CI/CD workflow using Jenkins. The Jenkins pipeline checks out the source code from GitHub, sets up the Python environment, installs the required dependencies, runs linting with Ruff, executes unit tests with Pytest, builds a Docker image, and performs SonarQube analysis followed by a quality gate check. This ensures that code quality, test coverage, and build integrity are verified before deployment.
+
+For testing, Pytest was used to validate the Flask application and confirm that the application behaves as expected. Linting was added with Ruff to catch style and syntax issues early in the pipeline. SonarQube was integrated to provide static analysis and enforce code quality through the quality gate stage.
+
+The application is packaged into a Docker image so it can run consistently across different environments. For deployment, Kubernetes manifests were created for two targets: Minikube for local deployment and AWS EKS for the cloud deployment path. The Minikube deployment is used to validate the application locally, while the AWS EKS deployment represents the production-like environment.
+
+To make deployment repeatable, helper scripts were added for both environments. The Minikube helper script applies the local Kubernetes manifests and waits for the rollout to finish. The AWS helper scripts build and push the Docker image to Amazon ECR, update the EKS deployment image reference, and apply the Kubernetes manifests to the cluster. This makes the deployment process more consistent and easier to repeat.
+
+Challenges and Fixes
+
+One challenge was a Docker context mismatch on Windows, which caused image and build operations to target the wrong engine. This was resolved by consistently using the desktop-linux Docker context. Another challenge was configuring SonarQube authentication correctly in Jenkins, which required creating a token and storing it as a Jenkins secret credential. Minikube also failed initially when it was configured with the wrong image repository, which prevented the Kubernetes control plane from starting correctly. That issue was fixed by recreating the cluster with registry.k8s.io as the image source. For the AWS deployment path, the EKS manifest initially used a hardcoded image reference, so reusable helper scripts were added to update the ECR image URI and apply the manifests more reliably. Jenkins also required Docker socket access to build images locally inside the CI environment.
+
+Results / Conclusion
+
+The final outcome of this project is a working CI/CD pipeline for the ACEest Fitness & Gym application. The workflow automates source code validation, testing, static analysis, Docker image creation, and deployment to both local and cloud Kubernetes environments. This demonstrates an end-to-end delivery process from code changes to a running application.
+
+The pipeline now supports automated testing with Pytest, code quality analysis with SonarQube, Docker image build and packaging, and deployment through Kubernetes manifests. The local Minikube environment provides a development deployment target, while AWS EKS serves as the cloud deployment target.
+
+Kubernetes was also used to support operational deployment features such as rolling updates and rollback. This means the application can be updated with minimal disruption and reverted to a previous version if needed. Overall, the project successfully demonstrates a complete and repeatable DevOps workflow.

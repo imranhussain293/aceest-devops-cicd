@@ -17,6 +17,21 @@ Re-run `docker context use desktop-linux` and then run `docker compose up -d` ag
 - Jenkins: http://localhost:8081
 - SonarQube: http://localhost:9000
 
+## What the pipeline does
+
+The Jenkins pipeline runs the following stages in order:
+
+1. Checkout
+2. Setup Python
+3. Lint
+4. Unit Tests
+5. Build Docker Image
+6. SonarQube Scan
+7. Quality Gate
+
+The `Build Docker Image` stage tags the app image with the current commit SHA,
+so each run produces a traceable build artifact.
+
 ## Default credentials
 
 SonarQube (first login):
@@ -43,3 +58,9 @@ docker exec aceest-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 The local Jenkins container is configured to build Docker images by mounting the Docker daemon socket (`/var/run/docker.sock`).
 This is convenient for local CI, but do not use this pattern for untrusted code.
+
+If you want to validate just the Docker build step locally, run:
+
+```bash
+docker build -t aceest-fitness:local .
+```
