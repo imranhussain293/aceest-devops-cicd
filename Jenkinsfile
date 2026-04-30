@@ -21,6 +21,12 @@ pipeline {
       steps {
         deleteDir()
         git branch: 'main', url: 'https://github.com/imranhussain293/aceest-devops-cicd.git'
+        script {
+          env.IMAGE_TAG = sh(
+            script: 'git rev-parse --short=12 HEAD',
+            returnStdout: true
+          ).trim()
+        }
       }
     }
 
@@ -66,7 +72,7 @@ pipeline {
         sh '''
           set -eux
           docker version
-          docker build -t ${IMAGE_NAME}:${GIT_COMMIT} .
+          docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
         '''
       }
     }
