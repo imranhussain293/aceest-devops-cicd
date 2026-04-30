@@ -3,24 +3,24 @@
 This page tracks the deliverables stated in the assignment brief.
 
 ## Tooling expected
-- Git + GitHub
-- Jenkins (CI)
-- Pytest (unit tests)
-- SonarQube (static analysis / quality gate)
-- Docker or Podman (containerization)
-- Container registry (Docker Hub or a local registry)
+- Git + GitHub: done
+- Jenkins (CI): done
+- Pytest (unit tests): done
+- SonarQube (static analysis / quality gate): done
+- Docker or Podman (containerization): done
+- Container registry: AWS ECR planned
 - Kubernetes deployment
-  - Local: Minikube
-  - Cloud: AWS / Azure / GCP (AWS planned)
+  - Local: Minikube done
+  - Cloud: AWS EKS planned
 
 ## Required artifacts in the submission
-- Flask application files + versioned releases
-- `Jenkinsfile`
-- `Dockerfile`
-- Kubernetes YAML manifests
-- Pytest test cases
-- SonarQube report/results
-- GitHub repo link
+- Flask application files + versioned releases: done
+- `Jenkinsfile`: done
+- `Dockerfile`: done
+- Kubernetes YAML manifests: Minikube done, AWS EKS draft added
+- Pytest test cases: done
+- SonarQube report/results: capture screenshot from local SonarQube
+- GitHub repo link: done
 - Short report (2–3 pages):
   - CI/CD architecture overview
   - Challenges faced + mitigations
