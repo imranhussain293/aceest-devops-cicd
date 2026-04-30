@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.git/
+.gitignore
+.vscode/
+*.db
+_assignment_docx_extracted/
+_assignment_plaintext.txt
+_assignment_paragraphs.txt

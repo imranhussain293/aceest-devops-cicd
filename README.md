@@ -28,5 +28,14 @@ Run the app locally:
 python -c "from aceest_fitness import create_app; create_app().run(host='0.0.0.0', port=5000)"
 ```
 
+Build and run the Docker image:
+
+```bash
+docker build -t aceest-fitness:local .
+docker run --rm -p 8080:8080 aceest-fitness:local
+```
+
+Then open `http://localhost:8080/health`.
+
 ## Documentation
 - See `docs/assignment.md` for the required deliverables checklist.
