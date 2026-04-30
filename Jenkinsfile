@@ -22,13 +22,32 @@ pipeline {
       }
     }
 
-    stage('Unit Tests') {
+    stage('Setup Python') {
       steps {
         sh '''
           set -eux
           python3 -m venv .venv
           . .venv/bin/activate
           pip install -r requirements.txt
+        '''
+      }
+    }
+
+    stage('Lint') {
+      steps {
+        sh '''
+          set -eux
+          . .venv/bin/activate
+          python -m ruff check src tests
+        '''
+      }
+    }
+
+    stage('Unit Tests') {
+      steps {
+        sh '''
+          set -eux
+          . .venv/bin/activate
           pytest -q --junitxml=pytest-junit.xml --cov=src --cov-report=xml:coverage.xml
         '''
       }
