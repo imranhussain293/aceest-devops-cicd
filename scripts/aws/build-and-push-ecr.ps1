@@ -21,7 +21,13 @@ function Invoke-Aws {
         [string[]]$AwsArgs
     )
 
-    $localAws = Get-Command aws -ErrorAction SilentlyContinue
+    $awsCliV2 = "C:\Program Files\Amazon\AWSCLIV2\aws.exe"
+    if (Test-Path $awsCliV2) {
+        & $awsCliV2 @AwsArgs
+        return
+    }
+
+    $localAws = Get-Command aws.exe -ErrorAction SilentlyContinue
     if ($localAws) {
         & $localAws.Source @AwsArgs
         return
@@ -41,13 +47,19 @@ $accountId = Invoke-Aws sts get-caller-identity --query Account --output text
 $registry = "$accountId.dkr.ecr.$AwsRegion.amazonaws.com"
 $imageUri = "$registry/$RepositoryName`:$ImageTag"
 
-$repoExists = $true
-Invoke-Aws ecr describe-repositories `
+$previousErrorActionPreference = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
+$describeOutput = Invoke-Aws ecr describe-repositories `
     --repository-names $RepositoryName `
-    --region $AwsRegion *> $null
+    --region $AwsRegion 2>&1
+$describeExitCode = $LASTEXITCODE
+$ErrorActionPreference = $previousErrorActionPreference
 
-if ($LASTEXITCODE -ne 0) {
+$repoExists = $true
+if ($describeExitCode -ne 0 -and ($describeOutput -match "RepositoryNotFoundException")) {
     $repoExists = $false
+} elseif ($describeExitCode -ne 0) {
+    throw $describeOutput
 }
 
 if (-not $repoExists) {

@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: aceest-fitness
-          image: 000000000000.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0
+          image: 602751007045.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
