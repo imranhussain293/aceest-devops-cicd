@@ -67,19 +67,23 @@ The script prints the full ECR image URI. Replace `IMAGE_URI_PLACEHOLDER` in
 Example:
 
 ```powershell
-(Get-Content infra/k8s/aws/deployment.yaml) `
-  -replace 'IMAGE_URI_PLACEHOLDER', '123456789012.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0' `
-  | Set-Content infra/k8s/aws/deployment.yaml
+.\scripts\aws\update-eks-image.ps1 `
+  -ImageUri '123456789012.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0'
 ```
+
+The deployment uses a rolling update strategy and `imagePullPolicy: Always`, so
+subsequent pushes with a new tag can be promoted by re-running the update plus
+`kubectl rollout status deployment/aceest-fitness`.
 
 ## Deploy to EKS
 
 ```powershell
 kubectl config current-context
-kubectl apply -f infra/k8s/aws/
-kubectl rollout status deployment/aceest-fitness
-kubectl get service aceest-fitness
+.\scripts\aws\deploy-eks.ps1
 ```
+
+If your cluster uses a load balancer, wait for the external endpoint and then
+hit `/health` on the service URL.
 
 ## Rollout and rollback
 
