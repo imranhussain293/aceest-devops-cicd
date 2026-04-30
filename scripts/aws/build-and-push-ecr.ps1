@@ -11,29 +11,52 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-if (-not (Get-Command aws -ErrorAction SilentlyContinue)) {
-    throw "AWS CLI is not installed or not available on PATH."
-}
-
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     throw "Docker CLI is not installed or not available on PATH."
 }
 
-$accountId = aws sts get-caller-identity --query Account --output text
+function Invoke-Aws {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$AwsArgs
+    )
+
+    $localAws = Get-Command aws -ErrorAction SilentlyContinue
+    if ($localAws) {
+        & $localAws.Source @AwsArgs
+        return
+    }
+
+    $awsDir = Join-Path $env:USERPROFILE ".aws"
+    if (-not (Test-Path $awsDir)) {
+        throw "AWS CLI is not installed and $awsDir does not exist. Configure AWS credentials first."
+    }
+
+    docker run --rm `
+        -v "$awsDir`:/root/.aws" `
+        amazon/aws-cli @AwsArgs
+}
+
+$accountId = Invoke-Aws sts get-caller-identity --query Account --output text
 $registry = "$accountId.dkr.ecr.$AwsRegion.amazonaws.com"
 $imageUri = "$registry/$RepositoryName`:$ImageTag"
 
-aws ecr describe-repositories `
+$repoExists = $true
+Invoke-Aws ecr describe-repositories `
     --repository-names $RepositoryName `
     --region $AwsRegion *> $null
 
 if ($LASTEXITCODE -ne 0) {
-    aws ecr create-repository `
+    $repoExists = $false
+}
+
+if (-not $repoExists) {
+    Invoke-Aws ecr create-repository `
         --repository-name $RepositoryName `
         --region $AwsRegion *> $null
 }
 
-aws ecr get-login-password --region $AwsRegion |
+Invoke-Aws ecr get-login-password --region $AwsRegion |
     docker login --username AWS --password-stdin $registry
 
 docker build -t "$RepositoryName`:$ImageTag" .

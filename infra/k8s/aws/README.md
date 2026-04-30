@@ -4,11 +4,44 @@ These manifests are for the production-like cloud deployment required by the ass
 
 ## Prerequisites
 
-- AWS CLI installed and configured
 - Docker Desktop running
 - `kubectl` installed
 - An EKS cluster with `kubectl` context configured
 - An ECR repository named `aceest-fitness`
+- AWS credentials configured under `C:\Users\<you>\.aws`
+
+If AWS CLI is not installed locally, the helper script uses the official
+`amazon/aws-cli` Docker image and mounts your local `.aws` folder.
+
+Configure credentials without sharing secrets in the repository or chat:
+
+```powershell
+mkdir $env:USERPROFILE\.aws
+notepad $env:USERPROFILE\.aws\credentials
+notepad $env:USERPROFILE\.aws\config
+```
+
+Example `credentials` file:
+
+```ini
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+```
+
+Example `config` file:
+
+```ini
+[default]
+region = ap-south-1
+output = json
+```
+
+Verify identity:
+
+```powershell
+docker run --rm -v "$env:USERPROFILE\.aws:/root/.aws" amazon/aws-cli sts get-caller-identity
+```
 
 ## Build and push image to ECR
 
