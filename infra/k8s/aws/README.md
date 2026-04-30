@@ -6,6 +6,7 @@ These manifests are for the production-like cloud deployment required by the ass
 
 - Docker Desktop running
 - `kubectl` installed
+- `eksctl` installed
 - An EKS cluster with `kubectl` context configured
 - An ECR repository named `aceest-fitness`
 - AWS credentials configured under `C:\Users\<you>\.aws`
@@ -43,6 +44,14 @@ Verify identity:
 docker run --rm -v "$env:USERPROFILE\.aws:/root/.aws" amazon/aws-cli sts get-caller-identity
 ```
 
+## Create EKS cluster
+
+```powershell
+eksctl create cluster -f infra/aws/eksctl-cluster.yaml
+aws eks update-kubeconfig --region ap-south-1 --name aceest-eks
+kubectl get nodes
+```
+
 ## Build and push image to ECR
 
 ```powershell
@@ -52,8 +61,16 @@ docker run --rm -v "$env:USERPROFILE\.aws:/root/.aws" amazon/aws-cli sts get-cal
   -ImageTag v0.1.0
 ```
 
-The script prints the full ECR image URI. Replace the placeholder image in
+The script prints the full ECR image URI. Replace `IMAGE_URI_PLACEHOLDER` in
 `deployment.yaml` with that URI before applying the manifests.
+
+Example:
+
+```powershell
+(Get-Content infra/k8s/aws/deployment.yaml) `
+  -replace 'IMAGE_URI_PLACEHOLDER', '123456789012.dkr.ecr.ap-south-1.amazonaws.com/aceest-fitness:v0.1.0' `
+  | Set-Content infra/k8s/aws/deployment.yaml
+```
 
 ## Deploy to EKS
 
