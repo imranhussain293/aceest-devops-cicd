@@ -6,8 +6,12 @@ This folder runs Jenkins + SonarQube locally.
 
 ```bash
 cd infra/ci
+docker context use desktop-linux
 docker compose up -d
 ```
+
+If you get an error like `No such image: jenkins/jenkins:lts-jdk17`, it usually means the image was pulled into a different Docker context/engine.
+Re-run `docker context use desktop-linux` and then run `docker compose up -d` again.
 
 ## Access
 - Jenkins: http://localhost:8081
